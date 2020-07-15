@@ -1,0 +1,1696 @@
+var bombsFound;
+var flagCount = 0;
+var bombX;
+var bombY;
+var flagX;
+var flagY;
+var tileNumbers;
+var zeros;
+var zeroX;
+var zeroY;
+setScreen("titleScreen");
+onEvent("letsPlayButton", "click", function( ) {
+  setScreen("instructionScreen");
+});
+onEvent("startButton", "click", function( ) {
+  setScreen("playScreen");
+  setBoard();
+  game(bombX, bombY);
+});
+
+function setBoard() {
+  zeros = 0;
+  var ones = 0;
+  var twos = 0;
+  var threes = 0;
+  var fours = 0;
+  var fives = 0;
+  var sixes = 0;
+  var sevens = 0;
+  var eights = 0;
+  zeroX = [];
+  zeroY = [];
+  var oneX = [];
+  var oneY = [];
+  var twoX = [];
+  var twoY = [];
+  var threeX = [];
+  var threeY = [];
+  var fourX = [];
+  var fourY = [];
+  var fiveX = [];
+  var fiveY = [];
+  var sixX = [];
+  var sixY = [];
+  var sevenX = [];
+  var sevenY = [];
+  var eightX = [];
+  var eightY = [];
+  tileNumbers = ["tile0", "tile1", "tile2", "tile3", "tile4", "tile5", "tile6", "tile7", "tile8", "tile9", "tile10", "tile11", "tile12", "tile13", "tile14", "tile15", "tile16", "tile17", "tile18", "tile19", "tile20", "tile21", "tile22", "tile23", "tile24", "tile25", "tile26", "tile27", "tile28", "tile29", "tile30", "tile31", "tile32", "tile33", "tile34", "tile35", "tile36", "tile37", "tile38", "tile39", "tile40", "tile41", "tile42", "tile43", "tile44", "tile45", "tile46", "tile47", "tile48", "tile49", "tile50", "tile51", "tile52", "tile53", "tile54", "tile55", "tile56", "tile57", "tile58", "tile59", "tile60", "tile61", "tile62", "tile63", "tile64", "tile65", "tile66", "tile67", "tile68", "tile69", "tile70", "tile71", "tile72", "tile73", "tile74", "tile75", "tile76", "tile77", "tile78", "tile79", "tile80", "tile81", "tile82", "tile83", "tile84", "tile85", "tile86", "tile87", "tile88", "tile89", "tile90", "tile91", "tile92", "tile93", "tile94", "tile95", "tile96", "tile97", "tile98", "tile99"]
+  bombX = [randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32, randomNumber(0, 9) * 32];
+  bombY = [(randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65, (randomNumber(0, 9) * 32) + 65];
+  var tileCount = 0;
+  flagX = [116, 116, 116, 116, 116, 116, 116, 116, 116, 116, 116, 116];
+  flagY = [413, 413, 413, 413, 413, 413, 413, 413, 413, 413, 413, 413];
+  for (var i = 0; i < 320; i += 32) {
+    for (var j = 65; j < 385; j += 32) {
+      showElement("tile" + tileCount);
+      setPosition("tile" + tileCount, i, j, 32, 32);
+      tileCount ++;
+    }
+  }
+  for (var i = 0; i < bombX.length; i ++) {
+    for (var j = 0; j < bombX.length; j ++) {
+      if (bombX[i] == bombX[j] && i != j && bombY[i] == bombY[j]) {
+        bombX[j] = randomNumber(0, 9) * 32;
+        bombY[j] = (randomNumber(0, 9) * 32) + 65;
+      }
+    }
+  }
+  for (var i = 0; i < bombX.length; i++) {
+    setPosition("bomb" + i, bombX[i], bombY[i], 32, 32);
+  }
+  for (var i = 0; i < 320; i += 32) {
+    for (var j = 65; j < 385; j += 32) {
+      if (findBombs(i, j, bombX, bombY) == 0) {
+        setPosition("zero" + zeros, i, j, 32, 32);
+        zeros ++;
+      } else if (findBombs(i, j, bombX, bombY) == 1) {
+        setPosition("one" + ones, i, j, 32, 32);
+        ones ++;
+      } else if (findBombs(i, j, bombX, bombY) == 2) {
+        setPosition("two" + twos, i, j, 32, 32);
+        twos ++;
+      } else if (findBombs(i, j, bombX, bombY) == 3) {
+        setPosition("three" + threes, i, j, 32, 32);
+        threes ++;
+      } else if (findBombs(i, j, bombX, bombY) == 4) {
+        setPosition("four" + fours, i, j, 32, 32);
+        fours ++;
+      } else if (findBombs(i, j, bombX, bombY) == 5) {
+        setPosition("five" + fives, i, j, 32, 32);
+        fives ++;
+      } else if (findBombs(i, j, bombX, bombY) == 6) {
+        setPosition("six" + sixes, i, j, 32, 32);
+        sixes ++;
+      } else if (findBombs(i, j, bombX, bombY) == 7) {
+        setPosition("seven" + sevens, i, j, 32, 32);
+        sevens ++;
+      } else {
+        setPosition("eight" + eights, i, j, 32, 32);
+        eights ++;
+      }
+    }
+  }
+  findXY("zero", zeroX, zeroY, zeros);
+  findXY("one", oneX, oneY, ones);
+  findXY("two", twoX, twoY, twos);
+  findXY("three", threeX, threeY, threes);
+  findXY("four", fourX, fourY, fours);
+  findXY("five", fiveX, fiveY, fives);
+  findXY("six", sixX, sixY, sixes);
+  findXY("seven", sevenX, sevenY, sevens);
+  findXY("eight", eightX, eightY, eights);
+}
+
+function findBombs(i, j, bombX, bombY) {
+  var bombs = 0;
+  for (var b = 0; b < bombX.length; b ++) {
+    if (i == bombX[b] && ((j - 32) == bombY[b])) {
+      bombs ++;
+    }
+    if ((i + 32) == bombX[b] && ((j - 32) == bombY[b])) {
+      bombs ++;
+    }
+    if ((i + 32) == bombX[b] && (j == bombY[b])) {
+      bombs ++;
+    }
+    if ((i + 32) == bombX[b] && ((j + 32) == bombY[b])) {
+      bombs ++;
+    }
+    if (i == bombX[b] && ((j + 32) == bombY[b])) {
+      bombs ++;
+    }
+    if ((i - 32) == bombX[b] && ((j + 32) == bombY[b])) {
+      bombs ++;
+    }
+    if ((i - 32) == bombX[b] && (j == bombY[b])) {
+      bombs ++;
+    }
+    if ((i - 32) == bombX[b] && ((j - 32) == bombY[b])) {
+      bombs ++;
+    }
+  }
+  return bombs;
+}
+
+function findXY(tile, tileX, tileY, NumberOfTiles) {
+  for (var i = 0; i < NumberOfTiles; i ++) {
+    appendItem(tileX, getXPosition(tile + i));
+    appendItem(tileY, getYPosition(tile + i));
+  }
+}
+
+function game(bombX, bombY) {
+  onEvent(tileNumbers[0], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition(tileNumbers[0]) == bombX[i])&&(getYPosition(tileNumbers[0]) == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(0, zeroX, zeroY);
+  hideElement(tileNumbers[0]);
+  checkWin();
+});onEvent(tileNumbers[1], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile1") == bombX[i])&&(getYPosition("tile1") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(1, zeroX, zeroY);
+  hideElement("tile1");
+  checkWin();
+  
+});onEvent(tileNumbers[2], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile2") == bombX[i])&&(getYPosition("tile2") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(2, zeroX, zeroY);
+  hideElement("tile2");
+  checkWin();
+});onEvent(tileNumbers[3], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile3") == bombX[i])&&(getYPosition("tile3") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(3, zeroX, zeroY);
+  hideElement("tile3");
+  checkWin();
+});onEvent(tileNumbers[4], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile4") == bombX[i])&&(getYPosition("tile4") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(4, zeroX, zeroY);
+  hideElement("tile4");
+  checkWin();
+});onEvent(tileNumbers[5], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile5") == bombX[i])&&(getYPosition("tile5") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(5, zeroX, zeroY);
+  hideElement("tile5");
+  checkWin();
+});onEvent(tileNumbers[6], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile6") == bombX[i])&&(getYPosition("tile6") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(6, zeroX, zeroY);
+  hideElement("tile6");
+  checkWin();
+});onEvent(tileNumbers[7], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile7") == bombX[i])&&(getYPosition("tile7") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(7, zeroX, zeroY);
+  hideElement("tile7");
+  checkWin();
+});onEvent(tileNumbers[8], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile8") == bombX[i])&&(getYPosition("tile8") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(8, zeroX, zeroY);
+  hideElement("tile8");
+  checkWin();
+});onEvent(tileNumbers[9], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile9") == bombX[i])&&(getYPosition("tile9") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(9, zeroX, zeroY);
+  hideElement("tile9");
+  checkWin();
+});onEvent(tileNumbers[10], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile10") == bombX[i])&&(getYPosition("tile10") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(10, zeroX, zeroY);
+  hideElement("tile10");
+  checkWin();
+});onEvent(tileNumbers[11], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile11") == bombX[i])&&(getYPosition("tile11") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(11, zeroX, zeroY);
+  hideElement("tile11");
+  checkWin();
+});onEvent(tileNumbers[12], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile12") == bombX[i])&&(getYPosition("tile12") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(12, zeroX, zeroY);
+  hideElement("tile12");
+  checkWin();
+});onEvent(tileNumbers[13], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile13") == bombX[i])&&(getYPosition("tile13") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(13, zeroX, zeroY);
+  hideElement("tile13");
+  checkWin();
+});onEvent(tileNumbers[14], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile14") == bombX[i])&&(getYPosition("tile14") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(14, zeroX, zeroY);
+  hideElement("tile14");
+  checkWin();
+});onEvent(tileNumbers[15], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile15") == bombX[i])&&(getYPosition("tile15") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(15, zeroX, zeroY);
+  hideElement("tile15");
+  checkWin();
+});onEvent(tileNumbers[16], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile16") == bombX[i])&&(getYPosition("tile16") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(16, zeroX, zeroY);
+  hideElement("tile16");
+  checkWin();
+});onEvent(tileNumbers[17], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile17") == bombX[i])&&(getYPosition("tile17") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(17, zeroX, zeroY);
+  hideElement("tile17");
+  checkWin();
+});onEvent(tileNumbers[18], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile18") == bombX[i])&&(getYPosition("tile18") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(18, zeroX, zeroY);
+  hideElement("tile18");
+  checkWin();
+});onEvent(tileNumbers[19], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile19") == bombX[i])&&(getYPosition("tile19") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(19, zeroX, zeroY);
+  hideElement("tile19");
+  checkWin();
+});onEvent(tileNumbers[20], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile20") == bombX[i])&&(getYPosition("tile20") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(20, zeroX, zeroY);
+  hideElement("tile20");
+  checkWin();
+});onEvent(tileNumbers[21], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile21") == bombX[i])&&(getYPosition("tile21") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(21, zeroX, zeroY);
+  hideElement("tile21");
+  checkWin();
+});onEvent(tileNumbers[22], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile22") == bombX[i])&&(getYPosition("tile22") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(22, zeroX, zeroY);
+  hideElement("tile22");
+  checkWin();
+});onEvent(tileNumbers[23], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile23") == bombX[i])&&(getYPosition("tile23") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(23, zeroX, zeroY);
+  hideElement("tile23");
+  checkWin();
+});onEvent(tileNumbers[24], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile24") == bombX[i])&&(getYPosition("tile24") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(24, zeroX, zeroY);
+  hideElement("tile24");
+  checkWin();
+});onEvent(tileNumbers[25], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile25") == bombX[i])&&(getYPosition("tile25") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(25, zeroX, zeroY);
+  hideElement("tile25");
+  checkWin();
+});onEvent(tileNumbers[26], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile26") == bombX[i])&&(getYPosition("tile26") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(26, zeroX, zeroY);
+  hideElement("tile26");
+  checkWin();
+});onEvent(tileNumbers[27], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile27") == bombX[i])&&(getYPosition("tile27") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(27, zeroX, zeroY);
+  hideElement(tileNumbers[27]);
+  checkWin();
+});onEvent(tileNumbers[28], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile28") == bombX[i])&&(getYPosition("tile28") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(28, zeroX, zeroY);
+  hideElement("tile28");
+  checkWin();
+});onEvent(tileNumbers[29], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile29") == bombX[i])&&(getYPosition("tile29") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(29, zeroX, zeroY);
+  hideElement("tile29");
+  checkWin();
+});onEvent(tileNumbers[30], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile30") == bombX[i])&&(getYPosition("tile30") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(30, zeroX, zeroY);
+  hideElement("tile30");
+  checkWin();
+});onEvent(tileNumbers[31], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile31") == bombX[i])&&(getYPosition("tile31") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(31, zeroX, zeroY);
+  hideElement("tile31");
+  checkWin();
+});onEvent(tileNumbers[32], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile32") == bombX[i])&&(getYPosition("tile32") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(32, zeroX, zeroY);
+  hideElement("tile32");
+  checkWin();
+});onEvent(tileNumbers[33], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile33") == bombX[i])&&(getYPosition("tile33") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(33, zeroX, zeroY);
+  hideElement("tile33");
+  checkWin();
+});onEvent(tileNumbers[34], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile34") == bombX[i])&&(getYPosition("tile34") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(34, zeroX, zeroY);
+  hideElement("tile34");
+  checkWin();
+});onEvent(tileNumbers[35], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile35") == bombX[i])&&(getYPosition("tile35") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(35, zeroX, zeroY);
+  hideElement("tile35");
+  checkWin();
+});onEvent(tileNumbers[36], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile36") == bombX[i])&&(getYPosition("tile36") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(36, zeroX, zeroY);
+  hideElement("tile36");
+  checkWin();
+});onEvent(tileNumbers[37], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile37") == bombX[i])&&(getYPosition("tile37") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(37, zeroX, zeroY);
+  hideElement("tile37");
+  checkWin();
+});onEvent(tileNumbers[38], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile38") == bombX[i])&&(getYPosition("tile38") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(38, zeroX, zeroY);
+  hideElement("tile38");
+  checkWin();
+});onEvent(tileNumbers[39], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile39") == bombX[i])&&(getYPosition("tile39") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(39, zeroX, zeroY);
+  hideElement("tile39");
+  checkWin();
+});onEvent(tileNumbers[40], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile40") == bombX[i])&&(getYPosition("tile40") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(40, zeroX, zeroY);
+  hideElement("tile40");
+  checkWin();
+});onEvent(tileNumbers[41], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile41") == bombX[i])&&(getYPosition("tile41") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(41, zeroX, zeroY);
+  hideElement("tile41");
+  checkWin();
+});onEvent(tileNumbers[42], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile42") == bombX[i])&&(getYPosition("tile42") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(42, zeroX, zeroY);
+  hideElement("tile42");
+  checkWin();
+});onEvent(tileNumbers[43], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile43") == bombX[i])&&(getYPosition("tile43") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(43, zeroX, zeroY);
+  hideElement("tile43");
+  checkWin();
+});onEvent(tileNumbers[44], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile44") == bombX[i])&&(getYPosition("tile44") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(44, zeroX, zeroY);
+  hideElement("tile44");
+  checkWin();
+});onEvent(tileNumbers[45], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile45") == bombX[i])&&(getYPosition("tile45") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(45, zeroX, zeroY);
+  hideElement("tile45");
+  checkWin();
+});onEvent(tileNumbers[46], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile46") == bombX[i])&&(getYPosition("tile46") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(46, zeroX, zeroY);
+  hideElement("tile46");
+  checkWin();
+});onEvent(tileNumbers[47], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile47") == bombX[i])&&(getYPosition("tile47") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(47, zeroX, zeroY);
+  hideElement("tile47");
+  checkWin();
+});onEvent(tileNumbers[48], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile48") == bombX[i])&&(getYPosition("tile48") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(48, zeroX, zeroY);
+  hideElement("tile48");
+  checkWin();
+});onEvent(tileNumbers[49], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile49") == bombX[i])&&(getYPosition("tile49") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(49, zeroX, zeroY);
+  hideElement("tile49");
+  checkWin();
+});onEvent(tileNumbers[50], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile50") == bombX[i])&&(getYPosition("tile50") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(50, zeroX, zeroY);
+  hideElement("tile50");
+  checkWin();
+});onEvent(tileNumbers[51], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile51") == bombX[i])&&(getYPosition("tile51") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(51, zeroX, zeroY);
+  hideElement("tile51");
+  checkWin();
+});onEvent(tileNumbers[52], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile52") == bombX[i])&&(getYPosition("tile52") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(52, zeroX, zeroY);
+  hideElement("tile52");
+  checkWin();
+});onEvent(tileNumbers[53], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile53") == bombX[i])&&(getYPosition("tile53") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(53, zeroX, zeroY);
+  hideElement("tile53");
+  checkWin();
+});onEvent(tileNumbers[54], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile54") == bombX[i])&&(getYPosition("tile54") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(54, zeroX, zeroY);
+  hideElement("tile54");
+  checkWin();
+});onEvent(tileNumbers[55], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile55") == bombX[i])&&(getYPosition("tile55") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(55, zeroX, zeroY);
+  hideElement("tile55");
+  checkWin();
+});onEvent(tileNumbers[56], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile56") == bombX[i])&&(getYPosition("tile56") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(56, zeroX, zeroY);
+  hideElement("tile56");
+  checkWin();
+});onEvent(tileNumbers[57], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile57") == bombX[i])&&(getYPosition("tile57") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(57, zeroX, zeroY);
+  hideElement("tile57");
+  checkWin();
+});onEvent(tileNumbers[58], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile58") == bombX[i])&&(getYPosition("tile58") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(58, zeroX, zeroY);
+  hideElement("tile58");
+  checkWin();
+});onEvent(tileNumbers[59], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile59") == bombX[i])&&(getYPosition("tile59") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(59, zeroX, zeroY);
+  hideElement("tile59");
+  checkWin();
+});onEvent(tileNumbers[60], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile60") == bombX[i])&&(getYPosition("tile60") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(60, zeroX, zeroY);
+  hideElement("tile60");
+  checkWin();
+});onEvent(tileNumbers[61], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile61") == bombX[i])&&(getYPosition("tile61") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(61, zeroX, zeroY);
+  hideElement("tile61");
+  checkWin();
+});onEvent(tileNumbers[62], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile62") == bombX[i])&&(getYPosition("tile62") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(62, zeroX, zeroY);
+  hideElement("tile62");
+  checkWin();
+});onEvent(tileNumbers[63], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile63") == bombX[i])&&(getYPosition("tile63") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(63, zeroX, zeroY);
+  hideElement("tile63");
+  checkWin();
+});onEvent(tileNumbers[64], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile64") == bombX[i])&&(getYPosition("tile64") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(64, zeroX, zeroY);
+  hideElement("tile64");
+  checkWin();
+});onEvent(tileNumbers[65], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile65") == bombX[i])&&(getYPosition("tile65") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(65, zeroX, zeroY);
+  hideElement("tile65");
+  checkWin();
+});onEvent(tileNumbers[66], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile66") == bombX[i])&&(getYPosition("tile66") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(66, zeroX, zeroY);
+  hideElement("tile66");
+  checkWin();
+});onEvent(tileNumbers[67], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile67") == bombX[i])&&(getYPosition("tile67") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(67, zeroX, zeroY);
+  hideElement("tile67");
+  checkWin();
+});onEvent(tileNumbers[68], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile68") == bombX[i])&&(getYPosition("tile68") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(68, zeroX, zeroY);
+  hideElement("tile68");
+  checkWin();
+});onEvent(tileNumbers[69], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile69") == bombX[i])&&(getYPosition("tile69") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(69, zeroX, zeroY);
+  hideElement("tile69");
+  checkWin();
+});onEvent(tileNumbers[70], "click", function( ) {
+  for (var i = 70; i < bombX.length; i ++) {
+    if ((getXPosition("tile70") == bombX[i])&&(getYPosition("tile70") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(70, zeroX, zeroY);
+  hideElement("tile70");
+  checkWin();
+});onEvent(tileNumbers[71], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile71") == bombX[i])&&(getYPosition("tile71") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(71, zeroX, zeroY);
+  hideElement("tile71");
+  checkWin();
+});onEvent(tileNumbers[72], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile72") == bombX[i])&&(getYPosition("tile72") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(72, zeroX, zeroY);
+  hideElement("tile72");
+  checkWin();
+});onEvent(tileNumbers[73], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile73") == bombX[i])&&(getYPosition("tile73") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(73, zeroX, zeroY);
+  hideElement("tile73");
+  checkWin();
+});onEvent(tileNumbers[74], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile74") == bombX[i])&&(getYPosition("tile74") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(74, zeroX, zeroY);
+  hideElement("tile74");
+  checkWin();
+});onEvent(tileNumbers[75], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile75") == bombX[i])&&(getYPosition("tile75") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(75, zeroX, zeroY);
+  hideElement("tile75");
+  checkWin();
+});onEvent(tileNumbers[76], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile76") == bombX[i])&&(getYPosition("tile76") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(76, zeroX, zeroY);
+  hideElement("tile76");
+  checkWin();
+});onEvent(tileNumbers[77], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile77") == bombX[i])&&(getYPosition("tile77") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(77, zeroX, zeroY);
+  hideElement("tile77");
+  checkWin();
+});onEvent(tileNumbers[78], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile78") == bombX[i])&&(getYPosition("tile78") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(78, zeroX, zeroY);
+  hideElement("tile78");
+  checkWin();
+});onEvent(tileNumbers[79], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile79") == bombX[i])&&(getYPosition("tile79") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(79, zeroX, zeroY);
+  hideElement("tile79");
+  checkWin();
+});onEvent(tileNumbers[80], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile80") == bombX[i])&&(getYPosition("tile80") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(80, zeroX, zeroY);
+  hideElement("tile80");
+  checkWin();
+});onEvent(tileNumbers[81], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile81") == bombX[i])&&(getYPosition("tile81") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(81, zeroX, zeroY);
+  hideElement("tile81");
+  checkWin();
+});onEvent(tileNumbers[82], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile82") == bombX[i])&&(getYPosition("tile82") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(82, zeroX, zeroY);
+  hideElement("tile82");
+  checkWin();
+});onEvent(tileNumbers[83], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile83") == bombX[i])&&(getYPosition("tile83") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(83, zeroX, zeroY);
+  hideElement("tile83");
+  checkWin();
+});onEvent(tileNumbers[84], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile84") == bombX[i])&&(getYPosition("tile84") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(84, zeroX, zeroY);
+  hideElement("tile84");
+  checkWin();
+});onEvent(tileNumbers[85], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile85") == bombX[i])&&(getYPosition("tile85") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(85, zeroX, zeroY);
+  hideElement("tile85");
+  checkWin();
+});onEvent(tileNumbers[86], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile86") == bombX[i])&&(getYPosition("tile86") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(86, zeroX, zeroY);
+  hideElement("tile86");
+  checkWin();
+});onEvent(tileNumbers[87], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile87") == bombX[i])&&(getYPosition("tile87") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(87, zeroX, zeroY);
+  hideElement("tile87");
+  checkWin();
+});onEvent(tileNumbers[88], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile88") == bombX[i])&&(getYPosition("tile88") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(88, zeroX, zeroY);
+  hideElement("tile88");
+  checkWin();
+});onEvent(tileNumbers[89], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile89") == bombX[i])&&(getYPosition("tile89") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(89, zeroX, zeroY);
+  hideElement("tile89");
+  checkWin();
+});onEvent(tileNumbers[90], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile90") == bombX[i])&&(getYPosition("tile90") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(90, zeroX, zeroY);
+  hideElement("tile90");
+  checkWin();
+});onEvent(tileNumbers[91], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile91") == bombX[i])&&(getYPosition("tile91") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(91, zeroX, zeroY);
+  hideElement("tile91");
+  checkWin();
+});onEvent(tileNumbers[92], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile92") == bombX[i])&&(getYPosition("tile92") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(92, zeroX, zeroY);
+  hideElement("tile92");
+  checkWin();
+});onEvent(tileNumbers[93], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile93") == bombX[i])&&(getYPosition("tile93") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(93, zeroX, zeroY);
+  hideElement("tile93");
+  checkWin();
+});onEvent(tileNumbers[94], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile94") == bombX[i])&&(getYPosition("tile94") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(94, zeroX, zeroY);
+  hideElement("tile94");
+  checkWin();
+});onEvent(tileNumbers[95], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile95") == bombX[i])&&(getYPosition("tile95") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(95, zeroX, zeroY);
+  hideElement("tile95");
+  checkWin();
+});onEvent(tileNumbers[96], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile96") == bombX[i])&&(getYPosition("tile96") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(96, zeroX, zeroY);
+  hideElement("tile96");
+  checkWin();
+});onEvent(tileNumbers[97], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile97") == bombX[i])&&(getYPosition("tile97") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(97, zeroX, zeroY);
+  hideElement("tile97");
+  checkWin();
+});onEvent(tileNumbers[98], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile98") == bombX[i])&&(getYPosition("tile98") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(98, zeroX, zeroY);
+  hideElement("tile98");
+  checkWin();
+});onEvent(tileNumbers[99], "click", function( ) {
+  for (var i = 0; i < bombX.length; i ++) {
+    if ((getXPosition("tile99") == bombX[i])&&(getYPosition("tile99") == bombY[i])) {
+      setScreen("loseScreen");
+      break;
+    }
+  }
+  spreadZeros(99, zeroX, zeroY);
+  hideElement("tile99");
+  checkWin();
+});
+  //**** these are the flag events
+  onEvent("tile0", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile0", flagX, flagY);
+    }
+  });onEvent("tile1", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile1", flagX, flagY);
+    }
+  });onEvent("tile2", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile2", flagX, flagY);
+    }
+  });onEvent("tile3", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile3", flagX, flagY);
+    }
+  });onEvent("tile4", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile4", flagX, flagY);
+    }
+  });onEvent("tile5", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile5", flagX, flagY);
+    }
+  });onEvent("tile6", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile6", flagX, flagY);
+    }
+  });onEvent("tile7", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile7", flagX, flagY);
+    }
+  });onEvent("tile8", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile8", flagX, flagY);
+    }
+  });onEvent("tile9", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile9", flagX, flagY);
+    }
+  });onEvent("tile10", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile10", flagX, flagY);
+    }
+  });onEvent("tile11", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile11", flagX, flagY);
+    }
+  });onEvent("tile12", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile12", flagX, flagY);
+    }
+  });onEvent("tile13", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile13", flagX, flagY);
+    }
+  });onEvent("tile14", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile14", flagX, flagY);
+    }
+  });onEvent("tile15", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile15", flagX, flagY);
+    }
+  });onEvent("tile16", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile16", flagX, flagY);
+    }
+  });onEvent("tile17", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile17", flagX, flagY);
+    }
+  });onEvent("tile18", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile18", flagX, flagY);
+    }
+  });onEvent("tile19", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile19", flagX, flagY);
+    }
+  });onEvent("tile20", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile20", flagX, flagY);
+    }
+  });onEvent("tile21", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile21", flagX, flagY);
+    }
+  });onEvent("tile22", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile22", flagX, flagY);
+    }
+  });onEvent("tile23", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile23", flagX, flagY);
+    }
+  });onEvent("tile24", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile24", flagX, flagY);
+    }
+  });onEvent("tile25", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile25", flagX, flagY);
+    }
+  });onEvent("tile26", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile26", flagX, flagY);
+    }
+  });onEvent("tile27", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile27", flagX, flagY);
+    }
+  });onEvent("tile28", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile28", flagX, flagY);
+    }
+  });onEvent("tile29", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile29", flagX, flagY);
+    }
+  });onEvent("tile30", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile30", flagX, flagY);
+    }
+  });onEvent("tile31", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile31", flagX, flagY);
+    }
+  });onEvent("tile32", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile32", flagX, flagY);
+    }
+  });onEvent("tile33", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile33", flagX, flagY);
+    }
+  });onEvent("tile34", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile34", flagX, flagY);
+    }
+  });onEvent("tile35", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile35", flagX, flagY);
+    }
+  });onEvent("tile36", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile36", flagX, flagY);
+    }
+  });onEvent("tile37", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile37", flagX, flagY);
+    }
+  });onEvent("tile38", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile38", flagX, flagY);
+    }
+  });onEvent("tile39", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile39", flagX, flagY);
+    }
+  });onEvent("tile40", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile40", flagX, flagY);
+    }
+  });onEvent("tile41", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile41", flagX, flagY);
+    }
+  });onEvent("tile42", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile42", flagX, flagY);
+    }
+  });onEvent("tile43", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile43", flagX, flagY);
+    }
+  });onEvent("tile44", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile44", flagX, flagY);
+    }
+  });onEvent("tile45", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile45", flagX, flagY);
+    }
+  });onEvent("tile46", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile46", flagX, flagY);
+    }
+  });onEvent("tile47", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile47", flagX, flagY);
+    }
+  });onEvent("tile48", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile48", flagX, flagY);
+    }
+  });onEvent("tile49", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile49", flagX, flagY);
+    }
+  });onEvent("tile50", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile50", flagX, flagY);
+    }
+  });onEvent("tile51", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile51", flagX, flagY);
+    }
+  });onEvent("tile52", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile52", flagX, flagY);
+    }
+  });onEvent("tile53", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile53", flagX, flagY);
+    }
+  });onEvent("tile54", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile54", flagX, flagY);
+    }
+  });onEvent("tile55", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile55", flagX, flagY);
+    }
+  });onEvent("tile56", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile56", flagX, flagY);
+    }
+  });onEvent("tile57", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile57", flagX, flagY);
+    }
+  });onEvent("tile58", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile58", flagX, flagY);
+    }
+  });onEvent("tile59", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile59", flagX, flagY);
+    }
+  });onEvent("tile60", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile60", flagX, flagY);
+    }
+  });onEvent("tile61", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile61", flagX, flagY);
+    }
+  });onEvent("tile62", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile62", flagX, flagY);
+    }
+  });onEvent("tile63", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile63", flagX, flagY);
+    }
+  });onEvent("tile64", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile64", flagX, flagY);
+    }
+  });onEvent("tile65", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile65", flagX, flagY);
+    }
+  });onEvent("tile66", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile66", flagX, flagY);
+    }
+  });onEvent("tile67", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile67", flagX, flagY);
+    }
+  });onEvent("tile68", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile68", flagX, flagY);
+    }
+  });onEvent("tile69", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile69", flagX, flagY);
+    }
+  });onEvent("tile70", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile70", flagX, flagY);
+    }
+  });onEvent("tile71", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile71", flagX, flagY);
+    }
+  });onEvent("tile72", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile72", flagX, flagY);
+    }
+  });onEvent("tile73", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile73", flagX, flagY);
+    }
+  });onEvent("tile74", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile74", flagX, flagY);
+    }
+  });onEvent("tile75", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile75", flagX, flagY);
+    }
+  });onEvent("tile76", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile76", flagX, flagY);
+    }
+  });onEvent("tile77", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile77", flagX, flagY);
+    }
+  });onEvent("tile78", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile78", flagX, flagY);
+    }
+  });onEvent("tile79", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile79", flagX, flagY);
+    }
+  });onEvent("tile80", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile80", flagX, flagY);
+    }
+  });onEvent("tile81", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile81", flagX, flagY);
+    }
+  });onEvent("tile82", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile82", flagX, flagY);
+    }
+  });onEvent("tile83", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile83", flagX, flagY);
+    }
+  });onEvent("tile84", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile84", flagX, flagY);
+    }
+  });onEvent("tile85", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile85", flagX, flagY);
+    }
+  });onEvent("tile86", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile86", flagX, flagY);
+    }
+  });onEvent("tile87", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile87", flagX, flagY);
+    }
+  });onEvent("tile88", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile88", flagX, flagY);
+    }
+  });onEvent("tile89", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile89", flagX, flagY);
+    }
+  });onEvent("tile90", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile90", flagX, flagY);
+    }
+  });onEvent("tile91", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile91", flagX, flagY);
+    }
+  });onEvent("tile92", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile92", flagX, flagY);
+    }
+  });onEvent("tile93", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile93", flagX, flagY);
+    }
+  });onEvent("tile94", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile94", flagX, flagY);
+    }
+  });onEvent("tile95", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile95", flagX, flagY);
+    }
+  });onEvent("tile96", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile96", flagX, flagY);
+    }
+  });onEvent("tile97", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile97", flagX, flagY);
+    }
+  });onEvent("tile98", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile98", flagX, flagY);
+    }
+  });onEvent("tile99", "mousedown", function(event){
+    if(event.which == 3){
+      getFlag("tile99", flagX, flagY);
+    }
+  });
+  //****put flags back
+  onEvent("flag0", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag0", 116, 413, 32, 32);
+      flagX[0] = 116;
+      flagY[0] = 413;
+    }
+  });onEvent("flag1", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag1", 116, 413, 32, 32);
+      flagX[1] = 116;
+      flagY[1] = 413;
+    }
+  });onEvent("flag2", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag2", 116, 413, 32, 32);
+      flagX[2] = 116;
+      flagY[2] = 413;
+    }
+  });onEvent("flag3", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag3", 116, 413, 32, 32);
+      flagX[3] = 116;
+      flagY[3] = 413;
+    }
+  });onEvent("flag4", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag4", 116, 413, 32, 32);
+      flagX[4] = 116;
+      flagY[4] = 413;
+    }
+  });onEvent("flag5", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag5", 116, 413, 32, 32);
+      flagX[5] = 116;
+      flagY[5] = 413;
+    }
+  });onEvent("flag6", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag6", 116, 413, 32, 32);
+      flagX[6] = 116;
+      flagY[6] = 413;
+    }
+  });onEvent("flag7", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag7", 116, 413, 32, 32);
+      flagX[7] = 116;
+      flagY[7] = 413;
+    }
+  });onEvent("flag8", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag8", 116, 413, 32, 32);
+      flagX[8] = 116;
+      flagY[8] = 413;
+    }
+  });onEvent("flag9", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag9", 116, 413, 32, 32);
+      flagX[9] = 116;
+      flagY[9] = 413;
+    }
+  });onEvent("flag10", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag10", 116, 413, 32, 32);
+      flagX[10] = 116;
+      flagY[10] = 413;
+    }
+  });onEvent("flag11", "mousedown", function(event) {
+    if (event.which == 3) {
+      setPosition("flag11", 116, 413, 32, 32);
+      flagX[11] = 116;
+      flagY[11] = 413;
+    }
+  });
+}
+
+function checkWin() {
+  bombsFound = 0;
+  for (var w = 0; w < 12; w ++) {
+    for (var z = 0; z < 12; z ++) {
+      if ((getXPosition("flag" + w) == getXPosition("bomb" + z))&&(getYPosition("flag" + w) == getYPosition("bomb" + z))) {
+        bombsFound ++;
+      }
+    }
+  }
+  if (bombsFound == 12) {
+    setScreen("winScreen");
+  }
+}
+
+function getFlag(tileNumber, flagX, flagY) {
+  for (var i = 0; i < flagX.length; i ++) {
+    if ((flagX[i] == 116)&&(flagY[i] == 413)) {
+      setPosition("flag"+i, getXPosition(tileNumber), getYPosition(tileNumber), 32, 32);
+      flagX[i] = getXPosition(tileNumber);
+      flagY[i] = getYPosition(tileNumber);
+      checkWin();
+      break;
+    }
+  }
+}
+
+function spreadZeros(index, zeroX, zeroY) {
+  for (var i = zeroX.length; i >= 0; i --) {
+    if ((zeroX[i] == getXPosition(tileNumbers[index]))&&(zeroY[i] == getYPosition(tileNumbers[index]))) {
+      hideElement(tileNumbers[index]);
+      removeItem(zeroX, i);
+      removeItem(zeroY, i);
+      if ((index >= 1)&&(index != 10)&&(index != 20)&&(index != 30)&&(index != 40)&&(index != 50)&&(index != 60)&&(index != 70)&&(index != 80)&&(index != 90)) {
+        spreadZeros(index - 1, zeroX, zeroY);
+        hideElement(tileNumbers[index - 1]);
+      }if ((index >= 10)&&(index != 19)&&(index != 29)&&(index != 39)&&(index != 49)&&(index != 59)&&(index != 69)&&(index != 79)&&(index != 89)&&(index != 99)) {
+        spreadZeros(index - 9, zeroX, zeroY);
+        hideElement(tileNumbers[index - 9]);
+      }if (index >= 10) {
+        spreadZeros(index - 10, zeroX, zeroY);
+        hideElement(tileNumbers[index - 10]);
+      }if ((index >= 11)&&(index != 20)&&(index != 30)&&(index != 40)&&(index != 50)&&(index != 60)&&(index != 70)&&(index != 80)&&(index != 90)) {
+        spreadZeros(index - 11, zeroX, zeroY);
+        hideElement(tileNumbers[index - 11]);
+      }if ((index <= 98)&&(index != 89)&&(index != 79)&&(index != 69)&&(index != 59)&&(index != 49)&&(index != 39)&&(index != 29)&&(index != 19)&&(index != 9)) {
+        spreadZeros(index + 1, zeroX, zeroY);
+        hideElement(tileNumbers[index + 1]);
+      }if ((index <= 89)&&(index != 80)&&(index != 70)&&(index != 60)&&(index != 50)&&(index != 40)&&(index != 30)&&(index != 20)&&(index != 10)&&(index != 0)) {
+        spreadZeros(index + 9, zeroX, zeroY);
+        hideElement(tileNumbers[index + 9]);
+      }if (index <= 89) {
+        spreadZeros(index + 10, zeroX, zeroY);
+        hideElement(tileNumbers[index + 10]);
+      }if ((index <= 88)&&(index != 79)&&(index != 69)&&(index != 59)&&(index != 49)&&(index != 39)&&(index != 29)&&(index != 19)&&(index != 9)) {
+        spreadZeros(index + 11, zeroX, zeroY);
+        hideElement(tileNumbers[index + 11]);
+      }
+    }
+  }
+}
+
+
